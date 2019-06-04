@@ -1,0 +1,605 @@
+<!DOCTYPE html>
+{% load staticfiles %}
+<html>
+    <head>
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+        <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/animate.css/3.2.0/animate.min.css">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
+        <link rel="stylesheet" href="{% static "css/detail.css" %}">
+    </head>
+<style>
+
+@import url('https://fonts.googleapis.com/css?family=Open+Sans:400,600,700');
+@import url('https://fonts.googleapis.com/css?family=Oswald');
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+html {
+    font-size: 16px;
+}
+
+body::before {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    content: " ";
+  border-bottom: 0.5rem solid #00C851;
+    z-index: 9999;
+}
+
+/* global styles */
+
+.show {
+    display: block !important;
+}
+
+.hide {
+    display: none;
+}
+
+.js-modal {
+    z-index: 9999;
+}
+
+.container {
+    max-width: 1140px;
+    margin: 0 auto;
+}
+
+.nav {
+    margin-top: 0.5rem;
+    background: #202020;
+    height: 5.375rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.nav__menu {
+    /* align-items: center; */
+    display: flex;
+}
+
+.nav__item {
+    text-decoration: none;
+    color: #eee;
+    font-family: Oswald, sans-serif;
+}
+
+.nav__header {
+    letter-spacing: 1.2px;
+    font-family: 'Oswald', sans-serif;
+    color: #fff;
+    font-size: 2rem;
+    text-decoration: none;
+    justify-content: center;
+}
+
+.search {
+    /* max-width: 1140px; */
+    margin: 0 auto;
+    background: #202020;
+    /* align-items: center; */
+    /* justify-content: center; */
+    display: flex;
+}
+
+.search__container {
+    width: 100%;
+    max-width: 1140px;
+    margin: 0 auto;
+    display: flex;
+}
+
+.search-form {
+    margin: 0 auto;
+    width: 100%;
+    text-align: center;
+    display: flex;
+    justify-content: center;
+    text-decoration-color: #eee
+}
+
+.search-form__query {
+    width: 20rem;
+    font-size: 1.4rem;
+    padding: 1rem 1.2rem;
+    font-family: 'Oswald', sans-serif;
+    caret-color: #00C851;
+    text-decoration-color: #eee
+}
+
+.search-form__query:focus {
+    outline: none;
+    color: #eee;
+}
+
+.search-form__icon {
+    background-color: #00C851;
+    font-size: 2rem;
+    padding: 1rem;
+}
+
+.search-form__icon > .fa-search {
+    color: white;
+}
+
+.main {
+    background: #202020;
+    /* fallback for old browsers */
+  /*     background-image: url('./clock-pattern.png'); */
+}
+
+.result {
+    background-image: linear-gradient(#1E1E1E 0%, #000 100%);
+    height: auto;
+}
+
+.movies {
+    padding: 3rem 0;
+    border-radius: 4px;
+    display: flex;
+    flex-wrap: wrap;
+    min-height: 100vh;
+}
+
+.movies__item {
+    width: 33.33333%;
+    border-radius: 4px;
+    position: relative;
+}
+
+.movies__item-title {
+    z-index: 11000;
+    font-size: 1rem;
+    font-family: Oswald, sans-serif;
+    position: absolute;
+    transform: translateX(-50%);
+    left: 50%;
+    top: 30%;
+    color: white;
+}
+
+.movies__item-image {
+    transition: all 0.2s ease;
+  width: 100%;
+    height: 45vw;
+    max-height: 35.626rem;
+    box-shadow: 0 0 5px 2px rgba(0,0,0,0.1);
+}
+
+.movies__item-star {
+    z-index: 9998;
+    color: #00C851;
+    top: 10%;
+    font-size: 3rem;
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+}
+
+.movies__item-details-button {
+    z-index: 9998;
+    padding: 0 0.2rem;
+    background: #333;
+    position: absolute;
+    outline: none;
+    border: 0;
+    top: 2rem;
+    border-radius: 50%;
+    right: 1rem;
+}
+
+.movies__item-details-button:hover {
+  cursor: pointer;
+    transform: scale(1.3);
+}
+
+.movies__item-details {
+    font-size: 1.4rem;
+    color: #00C851;
+}
+
+.movies__item-rating {
+    z-index: 9998;
+    font-size: 3rem;
+    font-family: Oswald, sans-serif;
+    position: absolute;
+    transform: translateX(-50%);
+    left: 50%;
+    top: 20%;
+    color: white;
+}
+
+.movies__item-expander {
+    font-weight: bold;
+    font-size: 1rem;
+  text-decoration: none;
+    text-align: center;
+    position: absolute;
+    transform: translateX(-50%);
+    left: 50%;
+  bottom: 10%;
+    z-index: 9998;
+    background-color: #00C851;
+    padding: 1rem 1rem;
+    color: white;
+    font-family: 'Open Sans', sans-serif;
+}
+
+.movies__item-expander:hover {
+  background: #00C851;
+    cursor: pointer;
+}
+
+.footer {
+    background-color: #282A3A !important;
+    display: flex;
+}
+
+.footer__text {
+    color: #00C851 !important;
+    text-align: center;
+    font-size: 0.8rem;
+    font-family: 'Open sans', sans-serif;
+}
+
+@media only screen and (max-width: 1224px) {
+    html {
+        font-size: 16px;
+    }
+
+    .container {
+        padding-left: 1rem;
+        padding-right: 1rem;
+    }
+
+}
+
+@media only screen and (max-width: 768px) {
+    html {
+        font-size: 14px;
+    }
+
+    .movies__item {
+        width: 50%;
+    }
+
+    .movies__item-image {
+        height: 60vw;
+    }
+}
+
+@media only screen and (max-width: 480px) {
+    html {
+        font-size: 12px;
+    }
+
+    .movies__item-image {
+        height: 100vw;
+    }
+
+    .movies__item {
+        width: 100%;
+    }
+}
+
+.details {
+    padding: 3rem 0;
+    border-radius: 4px;
+    flex-wrap: wrap;
+    min-height: 90vh;
+    z-index: 10;
+
+    display: grid;
+    grid-template-columns: 300px 900px;
+    grid-template-areas: "sidebar content";
+
+    justify-content: center;
+}
+
+.details__image {
+    width: 300px;
+    height: 450px;
+}
+
+.details__title {
+    font-size: 3rem;
+    font-family: Oswald, sans-serif;
+    color: white;
+    margin-top: 0rem;
+}
+
+.details__year {
+    font-size: 3rem;
+    font-family: Oswald, sans-serif;
+    color: limegreen;
+    margin-left: 3rem;
+    margin-top: 0rem;
+}
+
+.details__content {
+    font-family: Oswald, sans-serif;
+    font-size: 1.5rem;
+    color: white;
+}
+
+.details__content-header {
+    font-family: Oswald, sans-serif;
+    font-size: 2rem;
+    color: limegreen;
+    margin-left: 0rem;
+    margin-top: 1rem;
+    text-transform: uppercase;
+}
+
+.credits {
+    display: grid;
+    grid-template-columns: 400px 400px;
+    grid-column-gap: 50px;
+    grid-template-areas: "credit-list credit-list";
+    justify-content: center;
+}
+
+
+div.photos {
+margin: 5px;
+border: 1px solid #ccc;
+float: left;
+width: 300px;
+position: relative;
+font-family: Arial;
+}
+
+div.photos:hover {
+border: 1px solid #777;
+}
+
+div.photos img {
+width: 100%;
+height: auto;
+}
+
+div.gallery {
+margin: 5px;
+border: 1px solid #ccc;
+float: left;
+width: 200px;
+position: relative;
+font-family: Arial;
+}
+
+div.gallery:hover {
+border: 1px solid #777;
+}
+
+div.gallery img {
+width: 100%;
+height: auto;
+}
+.gallery .desc {
+  position: absolute;
+  bottom: 0;
+  background: rgb(0, 0, 0); /* Fallback color */
+  background: rgba(0, 0, 0, 0.5); /* Black background with 0.5 opacity */
+  color: #f1f1f1;
+  width: 100%;
+  padding: 5px;
+}
+
+</style>
+    <body>
+              {% block content %}
+              <section class="result">
+                  <div>
+                      <div class="container">
+                          <div class="details" background="https://image.tmdb.org/t/p/original{{ info.backdrop_path }}">
+                              <div class="sidebar">
+                                  <img class="details__image" src='https://image.tmdb.org/t/p/w600_and_h900_bestv2{{ info.poster_path }}' onerror="this.src='https://dummyimage.com/600x900/ababab/ffffff.png&amp;text=+Poster'"/>
+
+                                  <div class="details__content-header">
+                                      <p>Release Date</p>
+                                  </div>
+                                  <div class="details__content" style="margin-left: 2rem">
+                                      {% if date %}
+                                          <p>{{ date }}</p>
+                                      {% else %}
+                                          <p>⸺</p>
+                                      {% endif %}
+                                  </div>
+
+                                  <div class="details__content-header">
+                                      <p>Runtime</p>
+                                  </div>
+                                  <div class="details__content" style="margin-left: 2rem">
+                                      {% if info.runtime %}
+                                          <p>{{ info.runtime }} mins</p>
+                                      {% else %}
+                                          <p>⸺</p>
+                                      {% endif %}
+                                  </div>
+
+
+                                  <div class="details__content-header">
+                                      <p>Genres</p>
+                                  </div>
+                                  <div class="details__content" style="margin-left: 2rem">
+                                      {% if info.genres %}
+                                          {% for genre in info.genres %}
+                                              <p>{{ genre.name }}</p>
+                                          {% endfor %}
+                                      {% else %}
+                                      <p>⸺</p>
+                                      {% endif %}
+                                  </div>
+
+                                  <div class="details__content-header">
+                                      <p>Production</p>
+                                  </div>
+                                  <div class="details__content" style="margin-left: 2rem">
+                                      {% if info.production_companies %}
+                                          {% for company in info.production_companies %}
+                                              <p>{{ company.name }}</p>
+                                          {% endfor %}
+                                      {% else %}
+                                          <p>⸺</p>
+                                      {% endif %}
+                                  </div>
+
+                                  <div class="details__content-header">
+                                      <p>Spoken Languages</p>
+                                  </div>
+                                  <div class="details__content" style="margin-left: 2rem">
+                                      {% if info.spoken_languages %}
+                                          {% for language in info.spoken_languages %}
+                                              <p>{{ language.name }}</p>
+                                          {% endfor %}
+                                      {% else %}
+                                          <p>⸺</p>
+                                      {% endif %}
+                                  </div>
+
+                                  <div class="details__content-header">
+                                      <p>Trailer</p>
+                                  </div>
+                                  {% for trailer in trailers %}
+                                  <div class="details__content" >
+                                      <div class="embed-responsive embed-responsive-4by3">
+                                          <iframe class="embed-responsive-item" allowfullscreen="allowfullscreen" src="https://www.youtube.com/embed/{{ trailer.key }}"></iframe>
+                                      </div>
+                                  </div>
+                                  {% endfor %}
+
+
+                                  <div class="details__content-header">
+                                    <p>Photos</p>
+                                  </div>
+                                    {% for p in photos %}
+                                    <div class="details__content" >
+                                      <div class="photos">
+                                          <a href="https://image.tmdb.org/t/p/original{{ p.file_path }}"><img src="https://image.tmdb.org/t/p/w500{{ p.file_path }}" width="600" height="400" onerror="this.src='https://dummyimage.com/600x400/ababab/ffffff.png&amp;text=+ImageNotFound'"></a>
+                                      </div>
+                                    </div>
+                                         {% endfor %}
+
+                              </div>
+
+
+                              <div class="content" style="margin-left: 3rem;">
+                                  <div class="details__title">
+                                      <p style="display: inline;">{{ info.title }}</p>
+                                      <p style="display: inline;">({{ year }})</p>
+                                  </div>
+                                  <div class="details__title">
+                                      <i class="fa fa-star" style="color: limegreen"></i>
+                                      <p style="display: inline; font-size: 2rem; color: limegreen; font-weight: 900">{{ info.vote_average }}/10</p>
+                                  </div>
+                                  <div class="details__content-header" style="font-size: 1.5rem; text-transform: uppercase; ">
+                                      <p>{{ info.tagline }}</p>
+                                  </div>
+                                  <div class="details__content" style="font-size: 1.5rem; margin-top: 2rem">
+                                      <p>
+                                          {{ info.overview }}
+                                      </p>
+                                  </div>
+
+                                  <div class="credits">
+                                      {% if cast %}
+                                      <div class="credit-list">
+                                          <div class="details__content-header">
+                                              <p>Cast</p>
+                                          </div>
+                                          {% for member in cast %}
+                                          <div class="details__content">
+                                              <p style="display:inline;"><a href="{% url 'person' %}{{member.id}}"><img src="https://image.tmdb.org/t/p/w185{{ member.profile_path }}" width="60" height="80" align="middle" onerror="this.src='https://dummyimage.com/60x80/ababab/ffffff.png&amp;text=+ImageNotFound'"></a>
+                                              {{ member.name }}</p>
+                                              {% if member.character %}
+                                              <p style="display:inline; color: limegreen; font-size: 1rem;">as {{ member.character }}</p>
+                                              {% endif %}
+                                          </div>
+                                          <br>
+                                          {% endfor %}
+                                      </div>
+                                      {% endif %} {% if crew %}
+                                      <div class="credit-list">
+                                          <div class="details__content-header">
+                                              <p>Crew</p>
+                                          </div>
+                                          {% for member in crew %}
+                                          <div class="details__content">
+                                            <p style="display:inline;"><a href="{% url 'person' %}{{member.id}}"><img src="https://image.tmdb.org/t/p/w185{{ member.profile_path }}" width="60" height="80" align="middle" onerror="this.src='https://dummyimage.com/60x80/ababab/ffffff.png&amp;text=+ImageNotFound'"></a>
+                                            {{ member.name }}</p>
+                                              {% if member.job %}
+                                              <p style="display:inline; color: limegreen; font-size: 1rem;">, {{ member.job }}</p>
+                                              {% endif %}
+                                          </div>
+                                          <br>
+                                          {% endfor %}
+                                      </div>
+                                      {% endif %}
+                                  </div>
+
+                                  <div class="content">
+                                      {% if similar %}
+                                          <div class="details__content-header">
+                                              <p>Similar Movies</p>
+                                          </div>
+                                          {% for s in similar %}
+                                              <div class="gallery">
+                                                  <a href="{% url 'details' %}{{ s.id }}"><img src="https://image.tmdb.org/t/p/w500{{ s.poster_path }}" width="600" height="400" onerror="this.src='https://dummyimage.com/600x400/ababab/ffffff.png&amp;text=+ImageNotFound'"></a>
+                                                  <div class="desc"><center><p><b>{{ s.title }}</b></p></center></div>
+                                              </div>
+                                         {% endfor %}
+                                      {% endif %}
+                                  </div>
+
+                                  <div class="content">
+                                      {% if recommend %}
+                                          <div class="details__content-header">
+                                              <p>Recommended Movies</p>
+                                          </div>
+                                          {% for r in recommend %}
+                                              <div class="gallery">
+                                                  <a href="{% url 'details' %}{{ r.id }}"><img src="https://image.tmdb.org/t/p/w500{{ r.poster_path }}" width="600" height="400" onerror="this.src='https://dummyimage.com/600x400/ababab/ffffff.png&amp;text=+ImageNotFound'"></a>
+                                                  <div class="desc"><center><p><b>{{ r.title }}</b></p></center></div>
+                                              </div>
+                                         {% endfor %}
+                                      {% endif %}
+                                  </div>
+
+                                  <div class="content">
+                                      {% if reviews %}
+                                          <div class="details__content-header">
+                                              <p>Reviews</p>
+                                          </div>
+                                          {% for review in reviews %}
+                                              <div class="details__content">
+                                                  <p style="color:#FF1744;">{{ review.author }}</p>
+                                                  <p style="font-size: 1rem;">{{ review.content }}</p>
+                                              </div>
+                                          {% endfor %}
+                                      {% endif %}
+                                  </div>
+                              </div>
+                              <div class="sidebar">
+                              </div>
+
+
+
+                          </div>
+                      </div>
+                  </div>
+              </section>
+
+              {% endblock content %}
+          <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+          <script src="https://code.jquery.com/jquery-3.2.1.min.js"
+              integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4="
+              crossorigin="anonymous"></script>
+      </body>
+  </html>

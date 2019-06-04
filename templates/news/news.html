@@ -1,0 +1,418 @@
+<!DOCTYPE html>
+<html>
+<title>Resemble</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Raleway">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<style>
+
+body,h1,h2,h3,h4,h5,h6 {font-family: "Raleway", sans-serif}
+/*** COLORS ***/
+@bg-color: #913D88;
+@txt-color: #FFFFFF;
+@icn-color: #FFFFFF;
+
+/*** DEMO ***/
+.cntr{display:table;width:100%;height:100%;.cntr-innr{display:table-cell;text-align:center;vertical-align:middle}}
+
+/*** STYLES ***/
+.search {
+	display: inline-block;
+	position: relative;
+	height: 35px;
+	width: 35px;
+	box-sizing: border-box;
+	margin: 0px 8px 7px 0px;
+	padding: 7px 9px 0px 9px;
+	border: 3px solid @icn-color;
+	border-radius: 25px;
+	transition: all 200ms ease;
+	cursor: text;
+
+	&:after {
+		content: "";
+		position: absolute;
+		width: 3px;
+		height: 20px;
+		right: -5px;
+		top: 21px;
+		background: @icn-color;
+		border-radius: 3px;
+		transform: rotate(-45deg);
+		transition: all 200ms ease;
+	}
+
+	&.active,
+	&:hover {
+		width: 200px;
+		margin-right: 0px;
+
+		&:after {
+			height: 0px;
+		}
+	}
+
+	input {
+		width: 100%;
+		border: none;
+		box-sizing: border-box;
+		font-family: Helvetica;
+		font-size: 15px;
+		color: inherit;
+		background: transparent;
+		outline-width: 0px;
+	}
+}
+
+.dropbtn {
+  padding: 8.5px;
+  font-size: 15px;
+  border: none;
+  cursor: pointer;
+}
+
+.dropdown {
+  position: relative;
+  display: inline-block;
+}
+
+.dropdown-content {
+  display: none;
+  position: absolute;
+  min-width: 100px;
+  box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+  z-index: 1;
+}
+
+.dropdown-content a {
+  padding: 12px 16px;
+  text-decoration: none;
+  display: block;
+}
+
+.dropdown-content a:hover {background-color: #f1f1f1}
+
+.dropdown:hover .dropdown-content {
+  display: block;
+}
+
+.dropdown:hover .dropbtn {
+  background-color: #f1f1f1;
+}
+
+</style>
+
+<body class="w3-black w3-content" style="max-width:1600px">
+
+<!-- Sidebar/menu -->
+<nav class="w3-sidebar w3-collapse w3-dark-grey w3-animate-left" style="z-index:3;width:300px;" id="mySidebar"><br>
+  <div class="w3-container">
+    <a href="#" onclick="w3_close()" class="w3-hide-large w3-right w3-jumbo w3-padding w3-hover-grey" title="close menu">
+      <i class="fa fa-remove"></i>
+    </a>
+    <img src="user.png" style="width:45%;" class="w3-round"><br><br>
+    <br><h4><b>  Explore</b></h4>
+    <p class="w3-text-grey"></p>
+	<div class="cntr">
+	<div class="cntr-innr">
+	  <!-- <label class="search" for="inpt_search">
+			<input id="inpt_search" type="text" />
+		</label>
+		fa-search -->
+		<form class="search" method="GET" action="{% url 'searchnews' %}{{'relevancy'}}/{{ 1 }}">
+			{% if has_news %}
+			<input id="inpt_search" type="text" value="{{ queryy }}" name="query">
+			{% else %}
+      <input id="inpt_search" type="text" placeholder="Search News.." name="query">
+			{% endif%}
+    </form>
+	</div>
+</div>
+  <br>
+  <a href="{% url 'popularmovies' %}{{ 1 }}" onclick="w3_close()" class="w3-bar-item w3-button w3-padding "><i class="fa fa-video-camera fa-fw w3-margin-right"></i>Movies</a>
+  <br>
+    <a href="{% url 'populartv' %}{{ 1 }}" onclick="w3_close()" class="w3-bar-item w3-button w3-padding "><i class="fa fa-television fa-fw w3-margin-right"></i>Tv Shows</a>
+	<br>
+    <a href="{% url 'topheadlines' %}{{ 1 }}" onclick="w3_close()" class="w3-bar-item w3-button w3-padding w3-text-teal"><i class="fa fa-newspaper-o fa-fw w3-margin-right"></i>News</a>
+	<br>
+    <a href="#" onclick="w3_close()" class="w3-bar-item w3-button w3-padding"><i class="fa fa-book fa-fw w3-margin-right"></i>Books</a>
+ </div>
+  <div class="w3-panel w3-large">
+    <i class="fa fa-facebook-official w3-hover-opacity"></i>
+    <i class="fa fa-instagram w3-hover-opacity"></i>
+    <i class="fa fa-snapchat w3-hover-opacity"></i>
+    <i class="fa fa-pinterest-p w3-hover-opacity"></i>
+    <i class="fa fa-twitter w3-hover-opacity"></i>
+    <i class="fa fa-linkedin w3-hover-opacity"></i>
+  </div>
+</nav>
+
+<!-- Overlay effect when opening sidebar on small screens -->
+<div class="w3-overlay w3-hide-large w3-animate-opacity" onclick="w3_close()" style="cursor:pointer" title="close side menu" id="myOverlay"></div>
+
+<!-- !PAGE CONTENT! -->
+<div class="w3-main" style="margin-left:300px">
+
+  <!-- Header -->
+  <header id="portfolio">
+    <a href="#"><img src="/w3images/avatar_g2.jpg" style="width:65px;" class="w3-circle w3-right w3-margin w3-hide-large w3-hover-opacity"></a>
+    <span class="w3-button w3-hide-large w3-xxlarge w3-hover-text-grey" onclick="w3_open()"><i class="fa fa-bars"></i></span>
+    <div class="w3-container">
+    <h1><b>News</b></h1>
+    <div class="w3-section w3-bottombar w3-padding-16">
+      <span class="w3-margin-right">Filter:</span>
+			{% if has_news %}
+      <a href="{% url 'popularmovies' %}{{ 1 }}" class="w3-button w3-white"><i class="fa fa-fire w3-margin-right" hr></i>Top Headlines</a>
+      <a href="http://localhost:8000/search-news/{{'relevancy'}}/{{1}}?query={{ queryy }}" class="w3-button w3-dark-grey"><i class="fa fa-fire w3-margin-right"></i>Relevant</a>
+      <a href="http://localhost:8000/search-news/{{'popularity'}}/{{1}}?query={{ queryy }}" class="w3-button w3-white"><i class="fa fa-fire w3-margin-right"></i>Popular</a>
+      <a href="http://localhost:8000/search-news/{{'publishedAt'}}/{{1}}?query={{ queryy }}" class="w3-button w3-white"><i class="fa fa-fire w3-margin-right"></i>Latest</a>
+      <a href="#" class="w3-button w3-white"><i class="fa fa-star w3-margin-right"></i>Favorites</a>
+      <a href="#" class="w3-button w3-white w3-hide-small"><i class="fa fa-line-chart w3-margin-right"></i>Recommended for you</a>
+			{% elif topnews %}
+      <a href="{% url 'popularmovies' %}{{ 1 }}" class="w3-button w3-dark-grey"><i class="fa fa-fire w3-margin-right" hr></i>Top Headlines</a>
+        {% if categories %}
+        {% for c in categories %}
+           {% if country%}
+        <a href="{% url 'topheadlines2' %}{{country}}/{{c}}/{{1}}" class="w3-button w3-white">{{c}}</a>
+        {% else %}
+        <a href="{% url 'topheadlines2' %}{{'in'}}/{{c}}/{{1}}" class="w3-button w3-white">{{c}}</a>
+        {% endif%}
+        {% endfor%}
+        {% endif%}
+      <div class="dropdown">
+      <button class="dropbtn" class="w3-button w3-white">Country:</button>
+      <div class="dropdown-content">
+        {% if countries %}
+        {% for c in countries%}
+        {% if category%}
+        <a href="{% url 'topheadlines2' %}{{c}}/{{category}}/{{1}}" class="w3-button w3-white">{{c}}</a>
+        {% else %}
+        <a href="{% url 'topheadlines2' %}{{c}}/{{'general'}}/{{1}}" class="w3-button w3-white">{{c}}</a>
+        {% endif %}
+        {% endfor%}
+        {% endif%}
+      </div>
+      </div>
+      <a href="#" class="w3-button w3-white"><i class="fa fa-star w3-margin-right"></i>Favorites</a>
+      <a href="#" class="w3-button w3-white w3-hide-small"><i class="fa fa-line-chart w3-margin-right"></i>Recommended for you</a>
+			{% elif top_rated_movies %}
+      <a href="{% url 'popularmovies' %}{{ 1 }}" class="w3-button w3-white"><i class="fa fa-fire w3-margin-right" hr></i>Top Headlines</a>
+      <a href="{% url 'topratedmovies' %}{{ 1 }}" class="w3-button w3-white"><i class="fa fa-fire w3-margin-right"></i>Relevant</a>
+      <a href="{% url 'upcomingmovies' %}{{ 1 }}" class="w3-button w3-white"><i class="fa fa-fire w3-margin-right"></i>Popular</a>
+      <a href="{% url 'nowplayingmovies' %}{{ 1 }}" class="w3-button w3-white"><i class="fa fa-fire w3-margin-right"></i>Latest</a>
+      <a href="{% url 'nowplayingmovies' %}{{ 1 }}" class="w3-button w3-white"><i class="fa fa-fire w3-margin-right"></i>Science</a>
+      <a href="{% url 'nowplayingmovies' %}{{ 1 }}" class="w3-button w3-white"><i class="fa fa-fire w3-margin-right"></i>Sports</a>
+      <a href="{% url 'nowplayingmovies' %}{{ 1 }}" class="w3-button w3-white"><i class="fa fa-fire w3-margin-right"></i>Technology</a>
+      <a href="#" class="w3-button w3-white"><i class="fa fa-star w3-margin-right"></i>Favorites</a>
+      <a href="#" class="w3-button w3-white w3-hide-small"><i class="fa fa-line-chart w3-margin-right"></i>Recommended for you</a>
+			{% elif upcoming_movies %}
+      <a href="{% url 'popularmovies' %}{{ 1 }}" class="w3-button w3-white"><i class="fa fa-fire w3-margin-right" hr></i>Top Headlines</a>
+      <a href="{% url 'topratedmovies' %}{{ 1 }}" class="w3-button w3-white"><i class="fa fa-fire w3-margin-right"></i>Business</a>
+      <a href="{% url 'upcomingmovies' %}{{ 1 }}" class="w3-button w3-white"><i class="fa fa-fire w3-margin-right"></i>Entertainment</a>
+      <a href="{% url 'nowplayingmovies' %}{{ 1 }}" class="w3-button w3-white"><i class="fa fa-fire w3-margin-right"></i>General</a>
+      <a href="{% url 'nowplayingmovies' %}{{ 1 }}" class="w3-button w3-white"><i class="fa fa-fire w3-margin-right"></i>Science</a>
+      <a href="{% url 'nowplayingmovies' %}{{ 1 }}" class="w3-button w3-white"><i class="fa fa-fire w3-margin-right"></i>Sports</a>
+      <a href="{% url 'nowplayingmovies' %}{{ 1 }}" class="w3-button w3-white"><i class="fa fa-fire w3-margin-right"></i>Technology</a>
+      <a href="#" class="w3-button w3-white"><i class="fa fa-star w3-margin-right"></i>Favorites</a>
+      <a href="#" class="w3-button w3-white w3-hide-small"><i class="fa fa-line-chart w3-margin-right"></i>Recommended for you</a>
+			{% elif nowplaying_movies %}
+      <a href="{% url 'popularmovies' %}{{ 1 }}" class="w3-button w3-white"><i class="fa fa-fire w3-margin-right" hr></i>Top Headlines</a>
+      <a href="{% url 'topratedmovies' %}{{ 1 }}" class="w3-button w3-white"><i class="fa fa-fire w3-margin-right"></i>Business</a>
+      <a href="{% url 'upcomingmovies' %}{{ 1 }}" class="w3-button w3-white"><i class="fa fa-fire w3-margin-right"></i>Entertainment</a>
+      <a href="{% url 'nowplayingmovies' %}{{ 1 }}" class="w3-button w3-white"><i class="fa fa-fire w3-margin-right"></i>General</a>
+      <a href="{% url 'nowplayingmovies' %}{{ 1 }}" class="w3-button w3-white"><i class="fa fa-fire w3-margin-right"></i>Science</a>
+      <a href="{% url 'nowplayingmovies' %}{{ 1 }}" class="w3-button w3-white"><i class="fa fa-fire w3-margin-right"></i>Sports</a>
+      <a href="{% url 'nowplayingmovies' %}{{ 1 }}" class="w3-button w3-white"><i class="fa fa-fire w3-margin-right"></i>Technology</a>
+      <a href="#" class="w3-button w3-white"><i class="fa fa-star w3-margin-right"></i>Favorites</a>
+      <a href="#" class="w3-button w3-white w3-hide-small"><i class="fa fa-line-chart w3-margin-right"></i>Recommended for you</a>
+			{%else%}
+			{%endif%}
+    </div>
+    </div>
+  </header>
+  <!-- First Photo Grid-->
+
+	{% if has_news %}
+  <div class="w3-row-padding">
+		{% for m in search_news %}
+		  <div class="w3-third w3-container w3-margin-bottom">
+			<a href="{% url 'details' %}{{ m.id }}"><img src="{{ m.imageurl }}" onerror="this.src='https://dummyimage.com/600x900/ababab/ffffff.png&amp;text=+ImageNotFound'" style="width:100%" class="w3-hover-opacity"></a>
+      <div class="w3-container w3-white ">
+       <center><p><b>{{ m.title }}</b></p></center>
+      </div>
+     </div>
+		{% endfor%}
+	</div>
+
+	{% elif topnews %}
+  <div class="w3-row-padding">
+		{% for t in topnews %}
+		  <div class="w3-third w3-container w3-margin-bottom">
+			<a href="{% url 'details' %}{{ t.id }}"><img src="{{ t.imageurl }}" onerror="this.src='https://dummyimage.com/600x900/ababab/ffffff.png&amp;text=+ImageNotFound'" style="width:100%" class="w3-hover-opacity"></a>
+      <div class="w3-container w3-white ">
+       <center><p><b>{{ t.title }}</b></p></center>
+      </div>
+     </div>
+		{% endfor%}
+	</div>
+
+		{% elif top_rated_movies %}
+		<div class="w3-row-padding">
+			{% for l in top_rated_movies %}
+				<div class="w3-third w3-container w3-margin-bottom">
+				<a href="{% url 'details' %}{{ l.id }}"><img src="https://image.tmdb.org/t/p/w500{{ l.poster_path }}" onerror="this.src='https://dummyimage.com/600x900/ababab/ffffff.png&amp;text=+ImageNotFound'" style="width:100%" class="w3-hover-opacity"></a>
+				<div class="w3-container w3-white ">
+				 <center><p><b>{{ l.title }}</b></p></center>
+				</div>
+			</div>
+			{% endfor%}
+		</div>
+
+			{% elif upcoming_movies %}
+			<div class="w3-row-padding">
+				{% for u in upcoming_movies %}
+					<div class="w3-third w3-container w3-margin-bottom">
+					<a href="{% url 'details' %}{{ u.id }}"><img src="https://image.tmdb.org/t/p/w500{{ u.poster_path }}" onerror="this.src='https://dummyimage.com/600x900/ababab/ffffff.png&amp;text=+ImageNotFound'" style="width:100%" class="w3-hover-opacity"></a>
+					<div class="w3-container w3-white ">
+					 <center><p><b>{{ u.title }}</b></p></center>
+					</div>
+				</div>
+				{% endfor%}
+				</div>
+				{% elif nowplaying_movies %}
+				<div class="w3-row-padding">
+					{% for n in nowplaying_movies %}
+						<div class="w3-third w3-container w3-margin-bottom">
+						<a href="{% url 'details' %}{{ n.id }}"><img src="https://image.tmdb.org/t/p/w500{{ n.poster_path }}" onerror="this.src='https://dummyimage.com/600x900/ababab/ffffff.png&amp;text=+ImageNotFound'" style="width:100%" class="w3-hover-opacity"></a>
+						<div class="w3-container w3-white ">
+						 <center><p><b>{{ n.title }}</b></p></center>
+						</div>
+					</div>
+					{% endfor%}
+					{% else %}
+	       	<p>No Records Found!</p>
+	        	{% endif %}
+     </div>
+
+
+  <!-- Pagination -->
+	{% if has_result%}
+	<div class="w3-center w3-padding-32">
+    <div class="w3-bar">
+			{% for pg in pages %}
+      <a href="http://localhost:8000/search-movies/{{pg}}?query={{ queryy }}" class="w3-bar-item w3-black w3-button">{{pg}}</a>
+				 {% endfor %}
+		</div>
+	</div>
+	{% elif popular_movies %}
+  <div class="w3-center w3-padding-32">
+    <div class="w3-bar">
+			{% for pg in pages15 %}
+      <a href="{% url 'popularmovies' %}{{ pg }}" class="w3-bar-item w3-black w3-button">{{pg}}</a>
+				 {% endfor %}
+		</div> <br>
+		<div class="w3-bar">
+			{% for pg in pages30 %}
+			<a href="{% url 'popularmovies' %}{{ pg }}" class="w3-bar-item w3-black w3-button">{{pg}}</a>
+				 {% endfor %}
+		</div>
+  </div>
+
+	{% elif top_rated_movies %}
+	<div class="w3-center w3-padding-32">
+			<div class="w3-bar">
+				{% for pg in pages15 %}
+	      <a href="{% url 'topratedmovies' %}{{ pg }}" class="w3-bar-item w3-black w3-button">{{pg}}</a>
+					 {% endfor %}
+			</div> <br>
+			<div class="w3-bar">
+				{% for pg in pages30 %}
+				<a href="{% url 'topratedmovies' %}{{ pg }}" class="w3-bar-item w3-black w3-button">{{pg}}</a>
+					 {% endfor %}
+			</div>
+		</div>
+
+	{% elif upcoming_movies %}
+	<div class="w3-center w3-padding-32">
+		<div class="w3-bar">
+			{% for pg in pages15 %}
+			<a href="{% url 'upcomingmovies' %}{{ pg }}" class="w3-bar-item w3-black w3-button">{{pg}}</a>
+				 {% endfor %}
+		</div> <br>
+		<div class="w3-bar">
+			{% for pg in pages30 %}
+			<a href="{% url 'upcomingmovies' %}{{ pg }}" class="w3-bar-item w3-black w3-button">{{pg}}</a>
+				 {% endfor %}
+		</div>
+	</div>
+
+	{% elif nowplaying_movies %}
+	<div class="w3-center w3-padding-32">
+		<div class="w3-bar">
+			{% for pg in pages15 %}
+			<a href="{% url 'nowplayingmovies' %}{{ pg }}" class="w3-bar-item w3-black w3-button">{{pg}}</a>
+				 {% endfor %}
+		</div> <br>
+		<div class="w3-bar">
+			{% for pg in pages30 %}
+			<a href="{% url 'nowplayingmovies' %}{{ pg }}" class="w3-bar-item w3-black w3-button">{{pg}}</a>
+				 {% endfor %}
+	</div>
+	{% else %}
+	{% endif %}
+</div>
+
+
+  <!-- Contact Section -->
+  <div class="w3-container w3-padding-large w3-grey">
+    <hr class="w3-opacity">
+	  <h4 id="contact"><b>Contact Us</b></h4>
+    <form action="/action_page.php" target="_blank">
+      <div class="w3-section">
+        <label>Name</label>
+        <input class="w3-input w3-border" type="text" name="Name" required>
+      </div>
+      <div class="w3-section">
+        <label>Email</label>
+        <input class="w3-input w3-border" type="text" name="Email" required>
+      </div>
+      <div class="w3-section">
+        <label>Message</label>
+        <input class="w3-input w3-border" type="text" name="Message" required>
+      </div>
+      <button type="submit" class="w3-button w3-black w3-margin-bottom"><i class="fa fa-paper-plane w3-margin-right"></i>Send Message</button>
+    </form>
+  </div>
+
+  <!-- Footer -->
+  <footer class="w3-container w3-padding-32 w3-dark-grey">
+   <div class="w3-xlarge w3-section w3-center" style="margin-bottom:0px">
+    <i class="fa fa-facebook-official w3-hover-opacity"></i>
+    <i class="fa fa-instagram w3-hover-opacity"></i>
+    <i class="fa fa-snapchat w3-hover-opacity"></i>
+    <i class="fa fa-pinterest-p w3-hover-opacity"></i>
+    <i class="fa fa-twitter w3-hover-opacity"></i>
+    <i class="fa fa-linkedin w3-hover-opacity"></i>
+  </div>
+</footer>
+    </div>
+
+
+<script>
+// Script to open and close sidebar
+function w3_open() {
+    document.getElementById("mySidebar").style.display = "block";
+    document.getElementById("myOverlay").style.display = "block";
+}
+
+function w3_close() {
+    document.getElementById("mySidebar").style.display = "none";
+    document.getElementById("myOverlay").style.display = "none";
+}
+
+</script>
+
+</body>
+</html>
